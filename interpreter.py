@@ -13,6 +13,9 @@ class Interpreter:
     def reset(self):
         self.memory = [0, 0, 0]
         self.pointer = 0
+        self.code = ""
+        self.code_pointer = 0
+        self.return_to = []
 
     # opens and runs a bf file
     def run_file(self, fname):
@@ -42,11 +45,11 @@ class Interpreter:
                 self.run_code(input("\nbf> "), extra_commands=True)
             except KeyboardInterrupt:
                 print("Terminated by user")
-                exit(1)
+                sys.exit(1)
 
     def run_extra(self, command: str):
         if command.startswith("q") or command.startswith("quit") or command.startswith("exit"):
-            exit(0)
+            sys.exit(0)
         if command.startswith("r"):
             self.reset()
             return
@@ -54,6 +57,7 @@ class Interpreter:
             try: fname = command.split()[1]
             except IndexError: print("You need to provide an argument to ':e'")
             else: self.run_file(fname)
+            return
         if command.startswith("l"):
             if os.name == "nt": os.system("cls")
             else: os.system("clear")
@@ -61,29 +65,37 @@ class Interpreter:
         if command.startswith("help"):
             self.print_help()
             return
+        if command.startswith("w"):
+            try: fname = command.split()[1]
+            except IndexError: print("You need to provide a filename")
+            else:
+                print(f"Saving all run code to {fname}...")
+                f = open(fname, "w")
+                f.write(self.code)
+                f.close()
+            return
         print(f"Command '{command.split()[0]}' was not found")
 
     def _run(self, code):
-        pointer = 0
-        return_to = []
+        self.code += code
         returned = False
-        while pointer < len(code):
-            status = self.execute(code[pointer])
+        while self.code_pointer < len(self.code):
+            status = self.execute(self.code[self.code_pointer])
             if status == 0:
-                pointer += 1
+                self.code_pointer += 1
             if status == 1:
                 if not returned:
-                    return_to.append(pointer)
-                pointer += 1
+                    self.return_to.append(self.code_pointer)
+                self.code_pointer += 1
             if status == 2:
-                pointer = return_to[-1]
+                self.code_pointer = self.return_to[-1]
                 returned = True
             if status == 3:
-                while code[pointer] != "]":
-                    pointer += 1
-                del return_to[-1]
+                while self.code[self.code_pointer] != "]":
+                    self.code_pointer += 1
+                del self.return_to[-1]
                 returned = False
-                pointer += 1
+                self.code_pointer += 1
             # print(f"after: {status}")
             # print(return_to)
 
@@ -138,6 +150,9 @@ class Interpreter:
         print("==========DEBUG==========")
         print(f"memory: {self.memory}")
         print(f"pointer: {self.pointer}")
+        print(f"code: {self.code}")
+        print(f"code pointer: {self.code_pointer}")
+        print(f"return to: {self.return_to}")
         print("=========================")
         print()
 
@@ -148,7 +163,6 @@ class Interpreter:
     def _output(self):
         number = self.memory[self.pointer]
         if number < 32: number = 32
-        #print(chr(number), end="")
         sys.stdout.write(chr(number))
 
     # input a char (bf ,)

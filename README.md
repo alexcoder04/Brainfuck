@@ -21,11 +21,12 @@ Opens the file and runs it.
 
 ### Open console: `interpreter.console()`
 
-Starts a BF console where you can live run BF code and open files.
+Starts a BF console where you can live run BF code and run additional commands.
 
-### Run BF code: `interpreter.run_code(code: str)`
+### Run BF code: `interpreter.run_code(code: str, extra_commands: bool)`
 
-Runs raw bf code.
+Runs bf code.
+With `extra_commands`, you can decide whether those can be run or not (see below).
 
 ### Modify current cell: `interpreter.modify_current_cell(mode: bool)`
 
@@ -39,16 +40,27 @@ Executes a single BF command.
 
 Prints information like current memory state, current cell pointer and loops.
 
-## Console commands
+### Help: `interpreter.print_help()`
 
-### Exit: `:q`
+Prints some help.
 
-### Run file: `:e`
+## Extra commands
+
+Extra commands are commands that not belong to the standard Brainfuck.
+These are some Vim-inspired bindings which can be useful for the interactive bf console.
+They must be on a separate line, start with `:` and `interpreter.run_code` must receive the argument `extra_commands=True`.
+
+### Exit: `:q`, `:quit`, `:exit`
+
+### Run file: `:e path/to/file.bf`
 
 ### Reset interpreter: `:r`
 
 ### Clear the console: `:l`
 
+### Print help text: `:help`
+
+### Write code that was run in the session to a file: `:w path/to/file.bf`
 
 
 
