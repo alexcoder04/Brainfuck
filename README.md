@@ -70,7 +70,7 @@ They must be on a separate line, start with `:` and `interpreter.run_code` must 
 # Scripting
 
 You can also write files with bf code and execute them.
-You can use all normal commandsa and extra commands there.
+You can use all normal commands and extra commands there.
 You can also create one-line-comments with `;`. Example:
 
 ```brainfuck
@@ -89,5 +89,8 @@ You can also create one-line-comments with `;`. Example:
 >.[-]<
 ```
 
-
+# bfrc
+Like in most scripting languages, bf has an autorun file, which is executed every time the console is opened.
+The bfrc file is just a normal bf script, whch can contain special commands.
+It must be located in `$XDG_CONFIG_HOME/bf/bfrc`. ($XDG_CONFIG_HOME should be set to `$HOME/.config` on most Linux systems).
 
