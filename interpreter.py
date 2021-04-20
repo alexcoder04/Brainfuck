@@ -7,7 +7,7 @@ from datetime import datetime
 # main class with the interpreter code
 class Interpreter:
     def __init__(self):
-        self.VERSION = "1.1"
+        self.VERSION = "1.2"
         self.reset()
 
     def reset(self):
@@ -25,7 +25,7 @@ class Interpreter:
         code = self._read_file(fname)
         self.run_code(code, extra_commands=True)
 
-    # gets text in a file
+    # gets text without comments in a file
     def _read_file(self, fname):
         f = open(fname, "r")
         cont = f.read()
@@ -47,6 +47,7 @@ class Interpreter:
                 print("Terminated by user")
                 sys.exit(1)
 
+    # runs some extra commands (:q, :help, :l, ...)
     def run_extra(self, command: str):
         if command.startswith("q") or command.startswith("quit") or command.startswith("exit"):
             sys.exit(0)
@@ -76,6 +77,7 @@ class Interpreter:
             return
         print(f"Command '{command.split()[0]}' was not found")
 
+    # runs raw bf code
     def _run(self, code):
         self.code += code
         returned = False
@@ -99,6 +101,7 @@ class Interpreter:
             # print(f"after: {status}")
             # print(return_to)
 
+    # runs bf code
     def run_code(self, code: str, extra_commands=False):
         if extra_commands:
             for line in code.split("\n"):
@@ -135,7 +138,7 @@ class Interpreter:
             status = 2
         return status
 
-    # +/- bf commands
+    # (bf +) / (bf -)
     def modify_current_cell(self, mode=True):
         self._fill_cells()
         if mode:
@@ -144,7 +147,6 @@ class Interpreter:
         self.memory[self.pointer] -= 1
         if self.memory[self.pointer] < 0: self.memory[self.pointer] = 0
 
-    # prints debug information
     def print_debug_info(self):
         print()
         print("==========DEBUG==========")
@@ -177,6 +179,8 @@ class Interpreter:
         self._fill_cells()
         self.memory[self.pointer] = ord(inp)
 
+    # fills the not existent memory cells with zeros until the cursor position
     def _fill_cells(self):
         for cell in range(self.pointer + 1 - len(self.memory)):
             self.memory.append(0)
+

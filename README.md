@@ -44,6 +44,11 @@ Prints information like current memory state, current cell pointer and loops.
 
 Prints some help.
 
+# Console
+
+You can start a bf console by calling `interpreter.console()`.
+In there, you can run raw bf code and extra commands.
+
 ## Extra commands
 
 Extra commands are commands that not belong to the standard Brainfuck.
@@ -62,7 +67,27 @@ They must be on a separate line, start with `:` and `interpreter.run_code` must 
 
 ### Write code that was run in the session to a file: `:w path/to/file.bf`
 
+# Scripting
 
+You can also write files with bf code and execute them.
+You can use all normal commandsa and extra commands there.
+You can also create one-line-comments with `;`. Example:
+
+```brainfuck
+; a program that prints "hello"
+; prints h
+++++++[>++++++++++++<-]
+>.[-]<
+; prints e
+++++++++++[>++++++++++<-]>+<
+>.[-]<
+; prints l two times
++++++++++[>++++++++++++<-]
+>..[-]<
+; prints o
++++++++++++[>++++++++++<-]>+<
+>.[-]<
+```
 
 
 
