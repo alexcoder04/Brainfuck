@@ -1,5 +1,7 @@
 # BF interpreter in Python
 
+An embedable brainfuck interpreter, written with a friend just for fun.
+
 ## Usage in a Python script
 ```python
 from interpreter import Interpreter
